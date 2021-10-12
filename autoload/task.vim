@@ -104,13 +104,14 @@ endfunction
 
 function! s:GetSingleCard(cardName, listId, boardId)
   try
-    call s:CheckSelectedLine(a:cardName[0])
+    let cardNumber = matchstr(a:cardName, "\\d*")
+    call s:CheckSelectedLine(cardNumber)
   catch
     echomsg v:exception
     return
   endtry
 
-  let cardId = g:common#GetIdFromDictList(g:taskDictList, a:cardName[0])
+  let cardId = g:common#GetIdFromDictList(g:taskDictList, cardNumber)
   let desc = s:GetTaskDesc(cardId)
 
   call g:task_detail#OpenSingleCardNewBuffer(desc, a:listId, a:boardId, cardId)
@@ -152,7 +153,9 @@ function! s:EditCardTitle(cardName, listId, boardId)
     return
   endif
 
-  let cardId = g:common#GetIdFromDictList(g:taskDictList, a:cardName[0])
+  let cardNumber = matchstr(a:cardName, "\\d*")
+
+  let cardId = g:common#GetIdFromDictList(g:taskDictList, cardNumber)
   let cardTitle = g:common#GetTitleFromLine(a:cardName)
 
   call inputsave()
